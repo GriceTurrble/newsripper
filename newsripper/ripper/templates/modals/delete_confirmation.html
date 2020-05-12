@@ -1,0 +1,47 @@
+{% comment %}
+  Confirmation modal for deleting an Article.
+
+  Takes no data related to a specific article via Django context.
+  Instead, the following details must be filled in by JavaScript before the modal is shown:
+    "p.article-title" -- Insert the Article's `title` into this tag.
+    "input[name=article_id]" -- Set this input's value to the Article's `id` .
+
+  Controls for this modal are standardized. To create a link or button to launch this modal, add the following classes and attributes to that link or button:
+  - class ".ctl-article-delete"
+  - attribute "data-article-id", with the ID of the article to be removed.
+  - attribute "data-article-title", with the title of the article to be removed.
+
+  Django context:
+    modal_id -- [optional] The ID to be used for the modal window.
+      If not set, defaults to "delete-confirmation-modal"
+
+  NOTE: If {{ modal_id }} is set, you must also add a "data-target" attribute to the triggering link or button, with the modal ID included.
+{% endcomment %}
+
+{% with delete_modal_id=modal_id|default:"delete-confirmation-modal" %}
+<div class="modal d-print-none fade" id="{{ delete_modal_id }}" tabindex="-1" role="dialog" aria-labelledby="{{ delete_modal_id }}-label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title text-white" id="{{ delete_modal_id }}-label">Delete article?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to <strong>delete</strong> this article?</p>
+        <p class="article-title font-italic"></p>
+        <p>(It cannot be retrieved).</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+        <form method="POST" action="{% url 'ripper:delete_article' %}">
+          {% csrf_token %}
+          <input type="hidden" name="article_id" value=""/>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endwith delete_modal_id %}
