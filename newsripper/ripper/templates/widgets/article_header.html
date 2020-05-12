@@ -1,0 +1,23 @@
+{% comment %}
+  Article main header, shown at the top of the page.
+{% endcomment %}
+
+<div id="article-header" class="p-3 border-primary bg-light position-relative">
+  {# Time and type #}
+  {% include "ripper/widgets/article_time_and_type.html" with article=article %}
+
+  {# Title #}
+  <h1 class="h2">{{ article.title }}</h1>
+
+  {# Summary #}
+  {% if article.summary %}<p class="lead">{{ article.summary }}</p>{% endif %}
+
+  {# Byline #}
+  <p class="text-info">{{ article.byline }}</p>
+
+  {# Button controls #}
+  <span class="article-control-group position-absolute d-print-none" style="bottom: 0.5rem; right: 0.5rem" data-article-id="{{ article.id }}">
+    {# Controls with sequence `1` to avoid HTML ID collisions #}
+    {% include "ripper/widgets/article_controls.html" with article=article sequence=1 %}
+  </span>
+</div>
