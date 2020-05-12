@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  {# Additional meta tags go here (in the unlikely event we need them) #}
+  {% block head_meta %}{% endblock %}
+
+  {# Bootstrap 4.4.0 CSS/JS framework -- https://getbootstrap.com/docs/4.4/components/ #}
+  <link rel="stylesheet" href="{% static 'vendor/bootstrap4/css/bootstrap.min.css' %}?v=4.4.0"/>
+  {# FontAwesome 5 free edition SVG icons -- https://fontawesome.com/ #}
+  <script defer src="{% static 'vendor/fontawesome5free/js/all.min.js' %}"></script>
+  {# App-specific CSS overrides #}
+  <link rel="stylesheet" href="{% static 'newsripper/css/app.min.css' %}?v=1.0.4">
+  {# Page-specific CSS overrides go here #}
+  {% block head_css %}{% endblock %}
+  {# Page-specific head JS overrides go here. Use this for `<script defer ...>` calls for async loading #}
+  {# WARNING -- Inline <script> blocks should NOT go here! Use `block body_js` instead. #}
+  {% block head_js %}{% endblock %}
+
+  <title>{% block head_title %}{% endblock %} | NewsRips</title>
+</head>
+<body>
+  {% block page_modals %}{% endblock %}
+
+  {% include "widgets/base_navbar.html" %}
+
+  <div class="container {% block page_container_classes %}mt-3{% endblock %}">
+    {# Messages output controlled by separate template #}
+    {% if messages %}{% include 'widgets/base_messages.html' %}{% endif %}
+
+    {% include "widgets/base_print_header.html" %}
+
+    {# Main content goes in here #}
+    {% block body_content %}{% endblock %}
+  </div>
+
+  {## FOOTER ##}
+  {% include "widgets/base_footer.html" %}
+
+  {## JAVASCRIPT DEPENDENCIES ##}
+  {# jQuery (required for Bootstrap) #}
+  <script src="{% static 'vendor/jquery/jquery-3.4.1.min.js' %}?v=3.4.1"></script>
+  {# Bootstrap #}
+  <script src="{% static 'vendor/bootstrap4/js/bootstrap.bundle.min.js' %}?v=4.4.0"></script>
+  {% comment %}
+    I briefly considered moving the jQuery and Bootstrap calls into <head> with `defer` attrs,
+    but this would mean breaking inline JS pages: they could only work properly if their JS
+    was also a .js file loaded with `defer` from the <head>.
+
+    Since I'm lazy, let's leave things alone, eh?
+  {% endcomment %}
+
+  {# Newsripper app JS #}
+  <script src="{% static 'newsripper/js/app.jquery.min.js' %}?v=1.0.0"></script>
+
+  {# Page-specific JS goes in here. #}
+  {% block body_js %}{% endblock %}
+</body>
+
+</html>
