@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% comment %}
+  Article detail view, for displaying a single article.
+{% endcomment %}
+
+{% load static %}
+
+{% block head_title %}{{ article.title }} | {{ article.get_rip_type_display }}{% endblock %}
+
+{% block page_container_classes %}{% endblock %}
+
+{% block page_modals %}
+
+{# Deletion confirm modal #}
+{% include "ripper/modals/delete_confirmation.html" %}
+
+{# Reprocess confirm modal #}
+{% include "ripper/modals/reprocess_confirmation.html" %}
+
+{% endblock %}
+
+{% block body_content %}
+
+{# Headers #}
+{% include "ripper/widgets/article_header.html" with article=article %}
+{% include "ripper/widgets/article_sticky_header.html" with article=article %}
+
+{# Content #}
+<div id="ripped-article-body-mt-2">
+  {{ article.body_content|safe }}
+</div>
+
+{# Post-content link back #}
+<div class="jumbotron py-4 position-relative d-print-none">
+  <h2 class="display-4">
+    That's all, folx.
+  </h2>
+  <a href="{% url 'ripper:index' %}" class="btn btn-primary stretched-link">
+    <i class="fas fa-arrow-alt-circle-left"></i>
+    Back to home page.
+  </a>
+</div>
+
+{% endblock %}
+
+{% block body_js %}
+{# Page-specific JS #}
+<script src="{% static 'newsripper/js/article_details.jquery.min.js' %}?v=1.0.1"></script>
+{% endblock %}
