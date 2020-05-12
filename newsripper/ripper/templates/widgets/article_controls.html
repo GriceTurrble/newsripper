@@ -1,0 +1,76 @@
+{% comment %}
++-------------------------------------- IMPORTANT --------------------------------------+
+| * This widget starts with the `.btn-group` wrapper.
+| * It is recommended to wrap the `{% include %}` tag for this widget
+|   with `<span class="article-controls>...</span>"`
+|   * This is not done here, as the calling template may need some additional
+|     context-specific styling.
+|   * Rather than provide some wonky context to change that styling in this template,
+|     it is easier to require the caller to make that change on their own.
++---------------------------------------------------------------------------------------+
+
+  This widget is used to inject editing controls specific to one article.
+  Can be incuded on the same page multiple times for the same article object by passing
+  an optional `sequence` context, in order to create unique IDs.
+
+  Contexts:
+    article -- Article model instance.
+    sequence -- [optional] When using this widget for more than one dropdown
+      related to the **same** article, pass "sequence" with a different value
+      to each of those widgets. This allows each group to have a unique ID.
+      Integers recommended, but not required. Defaults to "1".
+  Examples:
+    Article #57 passed:      "#article-57-control-group-1" (default sequence=1)
+    Article #58, sequence=1: "#article-58-control-group-1"
+    Article #58, sequence=2: "#article-58-control-group-2"
+{% endcomment %}
+
+
+{# Slugify and default the `counter` context argument #}
+{% with btn_sequence=sequence|slugify|default:"1" %}
+  {# Slugify the article ID, to more easily concatenate it to other strings #}
+  {% with article_id=article.id|slugify %}
+    {# Put the btn-group ID together, so we can re-use it later #}
+    {% with article_btn_id="article-"|add:article_id|add:"-control-group-"|add:btn_sequence %}
+    <div class="btn-group" role="group" data-article-id="{{ article.id }}">
+
+      {# Gear button #}
+      <button id="{{ article_btn_id }}" type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-fw fa-cog"></i>
+      </button>
+
+      {# Dropdown #}
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ article_btn_id }}">
+        {# Header #}
+        <h6 class="dropdown-header">Article #{{ article.id }}, ripped {{ article.rip_time }}</h6>
+
+        {# Original article link #}
+        <a href="{{ article.url }}" target="_blank" rel="nofollow" class="dropdown-item" data-toggle="tooltip" data-placement="left" title="Open original {{ article.get_rip_type_display }} article">
+          <i class="fas fa-external-link-alt"></i>
+          Original
+        </a>
+
+        {% if article.manual %}
+        {# Disabled button for manually-processed articles #}
+        <a href="#" class="dropdown-item text-muted" data-toggle="tooltip" data-placement="left" title="This article was manually processed, so it cannot be re-processed with automation. Consider Deleting it and retrying from the original.">
+          <i class="fas fa-pen-fancy"></i>
+          Manual entry
+        </a>
+        {% else %}
+        {# Re-process button for automated articles. #}
+        <a href="#" class="ctl-article-reprocess dropdown-item" data-toggle="tooltip" data-placement="left" title="Get and rip the latest version of this article." data-article-id="{{ article.id }}" data-article-title="{{ article.title|escape }}">
+          <i class="fas fa-sync"></i>
+          Re-process
+        </a>
+        {% endif %}
+
+        {# Delete button #}
+        <a href="#" class="ctl-article-delete dropdown-item" data-toggle="tooltip" data-placement="left" title="Delete this article." data-article-id="{{ article.id }}" data-article-title="{{ article.title|escape }}">
+          <i class="fas fa-trash"></i>
+          Delete
+        </a>
+      </div>
+    </div>
+    {% endwith article_btn_id %}
+  {% endwith article_id %}
+{% endwith btn_sequence %}
