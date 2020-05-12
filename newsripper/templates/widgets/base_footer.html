@@ -1,0 +1,31 @@
+<footer class="bg-dark text-white p-2 d-print-none">
+  <h2 class="text-center">Newsrips</h2>
+  <div class="container-fluid">
+    <!-- <div class="row"> -->
+      <!-- <div class="col-md-3 col-sm-6 col-xs-12"> -->
+        <h3>About</h3>
+        <p>
+          News stories ripped straight from the headlines (and their respective news sites).
+        </p>
+        <p>
+          This tool is for personal consumption of media only.
+          All content stored here is readily accessible without subscription, despite what
+          site owners might say to the contrary.
+        </p>
+        <p>
+          Content is scraped using
+          <a href="https://pypi.org/project/beautifulsoup4/" rel="nofollow" target="_blank">BeautifulSoup4</a>,
+          a Python package that can parse HTML documents. These documents are obtained via simple GET request.
+        </p>
+        <p>
+          Though a target site may use JavaScript to hide content after it has been loaded,
+          we only deal with that original document. So, until they decide not to produce
+          an article <em>at all</em> except to logged-in users, this scaper is totally legit.
+        </p>
+      <!-- </div> -->
+    </div>
+  </div>
+</footer>
+<div class="copyright bg-secondary text-white text-center p-3 d-print-none">
+	<p class="mb-0">© {% now "Y" %} - Galen Rice<br> All Rights Reserved</p>
+</div>
