@@ -1,0 +1,25 @@
+{% comment %}
+  Sticky header, which appears fixed on the details page
+  when the main header is scrolled out of view.
+{% endcomment %}
+
+<div id="sticky-header" class="sticky-top d-print-none" aria-hidden="true" style="opacity: 0; visibility: hidden;">
+  <div class="inner p-3 border-bottom border-primary p-3 bg-light">
+    {# Time and type #}
+    {% include "ripper/widgets/article_time_and_type.html" with article=article %}
+
+    {# Simple article title #}
+    <p class="m-0">
+      <strong>{{ article.title }}</strong>
+    </p>
+  </div>
+
+  {# Article controls #}
+  <span class="article-control-group position-absolute" style="bottom: 0.5rem; right: 0.5rem" data-article-id="{{ article.id }}">
+    <button type="button" class="btn-to-top btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Back to top">
+      <i class="fas fa-fw fa-arrow-up"></i>
+    </button>
+    {# Controls with sequence `2` to avoid HTML ID collisions #}
+    {% include "ripper/widgets/article_controls.html" with article=article sequence=2 %}
+  </span>
+</div>
