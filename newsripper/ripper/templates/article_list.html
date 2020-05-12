@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% comment %}
+  Article list view, used as the site index.
+{% endcomment %}
+
+{% load my_filters %}
+
+{% block head_title %}Home{% endblock %}
+
+{% block body_content %}
+<div>
+  {% include "widgets/generic_pagination_controls.html" %}
+</div>
+
+<div class="row">
+  <div class="container mb-3">
+    {% for article in articles %}
+      {% include "ripper/article_card_line.html" with article=article %}
+    {% empty %}
+    <div class="jumbotron py-4">
+      <h3>
+        What? Nothing here?
+      </h3>
+      <p class="lead">
+        Try processing some stuff.
+      </p>
+    </div>
+    {% endfor %} {# `articles` loop #}
+  </div>
+</div>
+
+<div class="mb-5">
+  {% include "widgets/generic_pagination_controls.html" %}
+</div>
+{% endblock %}
+
+{% block body_js %}
+{% with dummy_id="123123" %}
+<script>
+$(function() {
+  $(".carousel").carousel();
+});
+</script>
+{% endwith dummy_id %}
+{% endblock %}
