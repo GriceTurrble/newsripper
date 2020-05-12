@@ -1,0 +1,15 @@
+{# Time and type: Display version #}
+<p class="mb-0 d-print-none">
+  {% if article.article_time or article.time_str %}
+    <span class="badge badge-primary">{{ article.article_time|default:article.time_str_for_template }}</span>
+  {% endif %}
+  <span class="badge badge-secondary">{{ article.get_rip_type_display }}</span>
+</p>
+
+{# Time and type: Print version #}
+<p class="text-muted mb-0 d-none d-print-block">
+  {% if article.article_time or article.time_str %}
+    {{ article.article_time|default:article.time_str_for_template }} --
+  {% endif %}
+  {{ article.get_rip_type_display }}
+</p>
