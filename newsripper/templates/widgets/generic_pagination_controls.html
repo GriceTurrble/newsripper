@@ -1,0 +1,100 @@
+{% comment %}
+  Generic pagination controls to show at the top or bottom of a page.
+
+  Context:
+    page_obj -- default for Django Paginator object.
+    num_links -- [Optional] number of visible page links before and after the active link (defaults to 3)
+{% endcomment %}
+
+{% comment %}
+  Fucking complicated, is what this mess of `with` blocks is.
+  In the end, this converts `num_links` (or the default `3` integer) into other ints
+  including the buffer (`num_links-1`)
+  and negative numbers for both `num_links` and that buffer.
+
+  These kind of conversions are not easy to do within templates, and would be better served as context variables processed within the view.
+  Nonetheless, doing it here allows for template-level control over number of pages to display.
+
+  If nothing else, all you need to do to adjust number of visible links
+  is change the default in the first `with` block below.
+{% endcomment %}
+{% with n_links=num_links|default:3 %}
+{% with n_links_buff=n_links|add:"-1" %}
+{% with n_links_slug=n_links|slugify n_links_buff_slug=n_links_buff|slugify %}
+{% with n_links_neg="-"|add:n_links_slug n_links_buff_neg="-"|add:n_links_buff_slug %}
+
+<div class="d-flex justify-content-center">
+  <nav aria-label="Page navigation">
+    <ul class="pagination mb-0">
+      {# First #}
+      <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+        <a class="page-link" href="{% if page_obj.has_previous %}?page=1{% else %}#{% endif %}">
+          <i class="fas fa-fast-backward fa-fw"></i>
+        </a>
+      </li>
+
+      {# Previous #}
+      <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+        <a class="page-link" href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}">
+          <i class="fas fa-step-backward fa-fw"></i>
+        </a>
+      </li>
+
+      {% if page_obj.number|add:n_links_buff_neg > 1 %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#">
+          <i class="fas fa-ellipsis-h fa-fw"></i>
+        </a>
+      </li>
+      {% endif %}
+
+      {# Main loop #}
+      {% for p in page_obj.paginator.page_range %}
+        {% if p > page_obj.number|add:n_links_neg and p < page_obj.number|add:n_links %}
+        <li class="page-item {% if page_obj.number == p %}active{% endif %}">
+          <a class="page-link" href="?page={{ p }}">
+            {{ p }}
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        {% endif %}
+      {% endfor %}
+
+      {# Ellipsis if  #}
+      {% if page_obj.paginator.num_pages > page_obj.number|add:n_links_buff %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#">
+          <i class="fas fa-ellipsis-h fa-fw"></i>
+        </a>
+      </li>
+      {% endif %}
+
+      {# Next #}
+      <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+        <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}">
+          <i class="fas fa-step-forward fa-fw"></i>
+        </a>
+      </li>
+
+      {# Last #}
+      <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+        <a class="page-link" href="{% if page_obj.has_next %}?page=last{% else %}#{% endif %}">
+          <i class="fas fa-fast-forward fa-fw"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+{% endwith n_links_neg n_links_buff_neg %}
+{% endwith n_links_slug n_links_buff_slug %}
+{% endwith n_links_buff %}
+{% endwith n_links %}
+
+{% comment %}
+  Rules for the visible links:
+  - If `page_obj.number` is above the number of links, start with a disabled `...` link
+  - Print up to `num_visible_links` links from the loop, which depends on a few factors.
+    - If page_obj
+  - If `page_obj.number` is below max_pages
+{% endcomment %}
