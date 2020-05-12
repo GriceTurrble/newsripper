@@ -1,0 +1,56 @@
+{% comment %}
+  Output for an article card in the index view, when used in the general card list
+{% endcomment %}
+
+{% load tz %}
+{% load my_filters %}
+
+{% with border_color=false %}
+
+{% ifchanged article.article_time|localtime|year_month_day %}
+<div class="row mt-3">
+  <div class="container">
+    <div class="alert alert-info mb-0 rounded-0">
+      <h5>
+        <i class="far fa-calendar"></i>
+        {{ article.article_time|date:"D, M jS, Y" }}
+      </h5>
+    </div>
+  </div>
+</div>
+{% endifchanged %}
+<div class="row">
+  <div class="col-md-3 col-4 pr-0">
+    <div class="card h-100 bg-transparent {% if border_color %}border-{{ border_color }}{% endif %} border-left-0 border-right-0 border-top-0 rounded-0">
+      <div class="card-body d-flex align-items-center justify-content-center">
+        <span class="text-muted">
+          <i class="fas fa-clock"></i>
+          {{ article.article_time|time:"g:iA" }}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9 col-8 pl-0">
+    <div class="card mat-shadow-1 h-100 bg-light {% if border_color %}border-{{ border_color }}{% endif %} border-top-0 rounded-0" data-article-id="{{ article.id }}">
+      {% if not top_story %}
+      <div class="card-body p-3">
+        <h5 class="card-title">
+          {{ article.title }}
+        </h5>
+        <div class="d-flex justify-content-between">
+          <small class="text-muted">
+            <i class="far fa-newspaper"></i>
+            {{ article.get_rip_type_display }}
+          </small>
+          <a href="{{ article.get_absolute_url }}" class="stretched-link text-muted font-italic">
+            <i class="fas fa-book-open"></i>
+            Read more...
+          </a>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endwith border_color %}
