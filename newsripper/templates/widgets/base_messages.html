@@ -1,0 +1,27 @@
+{% comment %}
+  Django messages framework output.
+  Uses Bootstrap Toasts: https://getbootstrap.com/docs/4.4/components/toasts/
+  * Toast container attaches below top nav and right side of screen, with dark background.
+  * Individual messages display with colored headers matching their message level.
+  * Messages are set to auto-hide after 4 seconds (data-delay for length, and data-autohide boolean activates it).
+  * Background and text colors are somewhat crudely controlled by message level, but non-error messages will dump tags into the class.
+    If multiple tags are ever used, this will probably break down.
+  * Spacing for each toast is set with `m-3` class (Bootstrap spacing utility).
+    See: https://getbootstrap.com/docs/4.4/utilities/spacing/
+  * Positioning of the toasts container is set by custom CSS, as Bootstrap doesn't provide utilities that help here
+    (they advise these customizations in their docs, as well).
+{% endcomment %}
+
+<div class="toast-container bg-dark" aria-live="polite" aria-atomic="true">
+  {% for message in messages %}
+  <div class="toast material-shadow-1 m-3" data-delay="4000" data-autohide="true" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header {% if message.tags %}bg-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %} {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR or message.level == DEFAULT_MESSAGE_LEVELS.WARNING or message.level == DEFAULT_MESSAGE_LEVELS.INFO %}text-white{% endif %}{% endif %}">
+      <strong class="mr-auto">Newsrips</strong>
+      <small>{{ message.tags|upper }}</small>
+    </div>
+    <div class="toast-body">
+      {{ message|safe }}
+    </div>
+  </div>
+  {% endfor %}
+</div>
