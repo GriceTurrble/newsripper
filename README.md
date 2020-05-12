@@ -25,9 +25,9 @@ If an article was already ripped from the same URL, it will not be re-ripped: th
 
 ### Proxy note
 
-The scripts attempt to automatically bypass proxies you may be running on, by calling `urllib.request.getproxies()` to pull in proxy data. If that's not sufficient, you may need to do some more work to customize it.
+The scripts attempt to automatically bypass proxies you may be running on, by calling `urllib.request.getproxies()` to pull in proxy data. This may require you set environment variables for `HTTP_PROXY` and `HTTPS_PROXY`.
 
-Refer to **PROXY_SETUP.md** if you need assistance here.
+If that's not sufficient, you may need to do some more work to customize it, or remove that bit entirely.
 
 ## Scrapers included
 
