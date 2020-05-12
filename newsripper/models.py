@@ -16,11 +16,11 @@ from django.urls import reverse as reverse_url
 from django.core.validators import URLValidator
 from django.utils import timezone
 
-from .tools import adjust_anchors
-from .tools import remove_tags
-from .tools import TargetTag
-from .tools import get_url_domain
-from .tools import url_is_valid
+from .rip_tools import adjust_anchors
+from .rip_tools import remove_tags
+from .rip_tools import TargetTag
+from .rip_tools import get_url_domain
+from .rip_tools import url_is_valid
 from .exceptions import URLDoesNotExist
 
 
