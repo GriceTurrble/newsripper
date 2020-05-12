@@ -1,0 +1,19 @@
+{% comment %}
+  Navbar content for the base page.
+{% endcomment %}
+
+<nav class="navbar sticky-top navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mb-0 h1" href="{% url "ripper:index" %}">
+      <i class="far fa-newspaper"></i>
+      NewsRips
+    </a>
+    <ul class="navbar-nav">&nbsp;</ul>
+    {# Simple "ripper" form element for new articles. #}
+    <form class="form-inline flex-nowrap" method="POST" action="{% url 'ripper:process_article' %}">
+      {% csrf_token %}
+      <input class="form-control mr-2" type="search" name="rip-url" placeholder="Rip a new one" aria-label="Search">
+      <button id="ripper-go-btn" class="btn btn-outline-primary my-2 my-sm-0" type="submit">Go</button>
+    </form>
+  </div>
+</nav>
